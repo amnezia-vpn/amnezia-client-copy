@@ -262,7 +262,7 @@ Logger::Log Logger::debug()
 }
 QString Logger::sensitive(const QString &input)
 {
-#ifdef Q_DEBUG
+#ifdef QT_DEBUG
     return input;
 #else
     Q_UNUSED(input);
