@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="AmneziaVPN" Version="$(var.Version)" Manufacturer="Privacy Technologies" UpgradeCode="12345678-1234-1234-1234-123456789abc">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"/>
+    <MajorUpgrade DowngradeErrorMessage="A newer version of AmneziaVPN is already installed."/>
+    <MediaTemplate/>
+    <Feature Id="ProductFeature" Title="AmneziaVPN" Level="1">
+      <ComponentGroupRef Id="AppFiles"/>
+    </Feature>
+  </Product>
+</Wix>
