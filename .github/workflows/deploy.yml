@@ -125,7 +125,7 @@ jobs:
         arch: 'x64'
 
     - name: 'Install WiX'
-      run: choco install wix -y
+      run: choco install wix-toolset -y
 
     - name: 'Build project'
       shell: cmd
