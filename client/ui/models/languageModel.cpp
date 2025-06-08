@@ -48,6 +48,7 @@ QString LanguageModel::getLocalLanguageName(const LanguageSettings::AvailableLan
     case LanguageSettings::AvailableLanguageEnum::Burmese: strLanguage = "မြန်မာဘာသာ"; break;
     case LanguageSettings::AvailableLanguageEnum::Urdu: strLanguage = "اُرْدُوْ"; break;
     case LanguageSettings::AvailableLanguageEnum::Hindi: strLanguage = "हिन्दी"; break;
+    case LanguageSettings::AvailableLanguageEnum::Vietnamese: strLanguage = "Tiếng Việt"; break;
     default: break;
     }
 
@@ -66,6 +67,7 @@ void LanguageModel::changeLanguage(const LanguageSettings::AvailableLanguageEnum
     case LanguageSettings::AvailableLanguageEnum::Burmese: emit updateTranslations(QLocale::Burmese); break;
     case LanguageSettings::AvailableLanguageEnum::Urdu: emit updateTranslations(QLocale::Urdu); break;
     case LanguageSettings::AvailableLanguageEnum::Hindi: emit updateTranslations(QLocale::Hindi); break;
+    case LanguageSettings::AvailableLanguageEnum::Vietnamese: emit updateTranslations(QLocale::Vietnamese); break;
     default: emit updateTranslations(QLocale::English); break;
     }
 }
@@ -83,6 +85,7 @@ int LanguageModel::getCurrentLanguageIndex()
     case QLocale::Burmese: return static_cast<int>(LanguageSettings::AvailableLanguageEnum::Burmese); break;
     case QLocale::Urdu: return static_cast<int>(LanguageSettings::AvailableLanguageEnum::Urdu); break;
     case QLocale::Hindi: return static_cast<int>(LanguageSettings::AvailableLanguageEnum::Hindi); break;
+    case QLocale::Vietnamese: return static_cast<int>(LanguageSettings::AvailableLanguageEnum::Vietnamese); break;
     default: return static_cast<int>(LanguageSettings::AvailableLanguageEnum::English); break;
     }
 }
