@@ -22,6 +22,11 @@ set PREBILT_DEPLOY_DATA_DIR=%PROJECT_DIR:"=%\client\3rd-prebuilt\deploy-prebuilt
 set DEPLOY_DATA_DIR=%SCRIPT_DIR:"=%\data\windows\x%BUILD_ARCH:"=%
 set INSTALLER_DATA_DIR=%WORK_DIR:"=%\installer\packages\%APP_DOMAIN:"=%\data
 set TARGET_FILENAME=%PROJECT_DIR:"=%\%APP_NAME:"=%_x%BUILD_ARCH:"=%.exe
+set TARGET_FILENAME_MSI=%PROJECT_DIR:"=%\%APP_NAME:"=%_x%BUILD_ARCH:"=%.msi
+set WIX_BIN_DIR=%ProgramFiles(x86)%\WiX Toolset v3.11\bin
+set PRODUCT_WXS=%SCRIPT_DIR:"=%\installer\wix\Product.wxs
+set SERVICE_WXS=%SCRIPT_DIR:"=%\installer\wix\Service.wxs
+set HEAT_WXS=%WORK_DIR:"=%\heat.wxs
 
 echo "Environment:"
 echo "WORK_DIR:             %WORK_DIR%"
@@ -32,10 +37,12 @@ echo "OUT_APP_DIR:          %OUT_APP_DIR%"
 echo "DEPLOY_DATA_DIR:      %DEPLOY_DATA_DIR%"
 echo "INSTALLER_DATA_DIR:   %INSTALLER_DATA_DIR%"
 echo "TARGET_FILENAME:      %TARGET_FILENAME%"
+echo "TARGET_FILENAME_MSI: %TARGET_FILENAME_MSI%"
 
 echo "Cleanup..."
 rmdir /Q /S %WORK_DIR%
 del %TARGET_FILENAME%
+del %TARGET_FILENAME_MSI%
 
 mkdir %WORK_DIR%
 
@@ -45,6 +52,8 @@ cmake --version
 
 cd %PROJECT_DIR%
 call cmake . -B %WORK_DIR%  "-DCMAKE_BUILD_TYPE:STRING=Release" "-DCMAKE_PREFIX_PATH:PATH=%QT_BIN_DIR%"
+
+for /f "tokens=3" %%A in ('findstr /C:"#define APP_VERSION" "%WORK_DIR%\client\version.h"') do set APP_VERSION=%%~A
 
 cd %WORK_DIR%
 cmake --build . --config release -- /p:UseMultiToolTask=true /m
@@ -84,10 +93,16 @@ cd "%WORK_DIR:"=%\installer"
 echo "Creating installer..."
 "%QIF_BIN_DIR:"=%\binarycreator" --offline-only -v -c config\windows.xml -p packages -f %TARGET_FILENAME%
 
+echo "Generating MSI..."
+"%WIX_BIN_DIR%\heat.exe" dir "%OUT_APP_DIR%" -cg AppFiles -dr INSTALLDIR -sreg -srd -sfrag -out "%HEAT_WXS%" -var "SourceDir=%OUT_APP_DIR%"
+"%WIX_BIN_DIR%\candle.exe" -dSourceDir="%OUT_APP_DIR%" -dVersion=%APP_VERSION% -o "%WORK_DIR%\" "%PRODUCT_WXS%" "%SERVICE_WXS%" "%HEAT_WXS%"
+"%WIX_BIN_DIR%\light.exe" -ext WixUIExtension "%WORK_DIR%\Product.wixobj" "%WORK_DIR%\Service.wixobj" "%WORK_DIR%\heat.wixobj" -o "%TARGET_FILENAME_MSI%"
+
 timeout 5
 
 cd %PROJECT_DIR%
 signtool sign /v /n "Privacy Technologies OU" /fd sha256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 "%TARGET_FILENAME%"
+signtool sign /v /n "Privacy Technologies OU" /fd sha256 /tr http://timestamp.comodoca.com/?td=sha256 /td sha256 "%TARGET_FILENAME_MSI%"
 
-echo "Finished, see %TARGET_FILENAME%"
+echo "Finished, see %TARGET_FILENAME% and %TARGET_FILENAME_MSI%"
 exit 0

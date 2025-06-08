@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIR">
+      <Component Id="ServiceComponent" Guid="*">
+        <File Id="ServiceExe" Source="$(var.SourceDir)\\AmneziaVPN-service.exe" KeyPath="yes" />
+        <ServiceInstall Id="InstallService" Type="ownProcess" Name="AmneziaVPN-service" DisplayName="AmneziaVPN Service" Start="auto" ErrorControl="normal" />
+        <ServiceControl Id="StartService" Name="AmneziaVPN-service" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

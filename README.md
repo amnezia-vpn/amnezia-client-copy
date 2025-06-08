@@ -34,6 +34,7 @@
 - Protocols with traffic Masking (Obfuscation): OpenVPN over [Cloak](https://github.com/cbeuw/Cloak) plugin, Shadowsocks (OpenVPN over Shadowsocks), [AmneziaWG](https://docs.amnezia.org/documentation/amnezia-wg/) and XRay.
 - Split tunneling support - add any sites to the client to enable VPN only for them or add Apps (only for Android and Desktop).
 - Windows, MacOS, Linux, Android, iOS releases.
+- Windows installer available in both EXE and MSI formats.
 - Support for AmneziaWG protocol configuration on [Keenetic beta firmware](https://docs.keenetic.com/ua/air/kn-1611/en/6319-latest-development-release.html#UUID-186c4108-5afd-c10b-f38a-cdff6c17fab3_section-idm33192196168192-improved).
 
 ## Links

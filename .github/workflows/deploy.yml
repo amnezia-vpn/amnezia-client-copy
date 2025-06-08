@@ -124,6 +124,9 @@ jobs:
       with:
         arch: 'x64'
 
+    - name: 'Install WiX 3.11'
+      run: choco install wixtoolset --version 3.11.2 -y
+
     - name: 'Build project'
       shell: cmd
       run: |
@@ -136,7 +139,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: AmneziaVPN_Windows_installer
-        path: AmneziaVPN_x${{ env.BUILD_ARCH }}.exe
+        path: |
+          AmneziaVPN_x${{ env.BUILD_ARCH }}.exe
+          AmneziaVPN_x${{ env.BUILD_ARCH }}.msi
         retention-days: 7
 
     - name: 'Upload unpacked artifact'
